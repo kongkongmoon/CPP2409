@@ -20,12 +20,14 @@ int main(){
     }
 
     int choice;
-    
+    bool b=true;
+
+    while(b){
     cout << "1. 가장 나이가 많은 사람 출력 " << endl; //메뉴 출력
     cout << "2. 가장 나이가 적은 사람 출력" << endl;
     cout << "3. 종료 " << endl;
     cin >> choice; //입력
-    
+
     switch(choice){ //같은 때는 먼저 적은 사람 한명만 출력됨
         case 1: //나이가 가장 많은 사람
             for(int i=0; i<maxPeople; i++){ 
@@ -34,7 +36,7 @@ int main(){
                 highAge=ages[i];
             }
         }
-        cout << "가장 나이가 많은 사람은 " << highName << "입니다.";
+        cout << "가장 나이가 많은 사람은 " << highName << "입니다.\n\n";
             break;
         case 2: //나이가 가장 적은 사람
             for(int i=0; i<maxPeople; i++){
@@ -43,15 +45,16 @@ int main(){
                 lowAge=ages[i];
             }
         }
-        cout << "가장 나이가 적은 사람은" << lowName << "입니다.";
+        cout << "가장 나이가 적은 사람은" << lowName << "입니다.\n\n";
             break;
         case 3:
             cout << "종료합니다." << endl;
+            b=false;
             break;
         default:
             cout << "잘못된 선택입니다." << endl;
             break;
-    }
+    }}
     return 0;
 
 }
