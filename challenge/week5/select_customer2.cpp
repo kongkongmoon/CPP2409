@@ -6,7 +6,8 @@ int main(){
     const int maxPeople =5;
     string names[maxPeople];
     int ages[maxPeople];
-    string highName, lowName;
+    string highName[5];
+    string lowName[5];
     int highAge=0;
     int lowAge =1000;
 
@@ -28,24 +29,34 @@ int main(){
     cout << "3. 종료 " << endl;
     cin >> choice; //입력
 
-    switch(choice){ //같은 때는 먼저 적은 사람 한명만 출력됨
+    switch(choice){ //
         case 1: //나이가 가장 많은 사람
+        cout << "가장 나이가 많은 사람은 ";
             for(int i=0; i<maxPeople; i++){ 
-            if(highAge<ages[i]){
-                highName=names[i];
+            if(highAge<=ages[i]){
+                highName[i]=names[i]; //사람을 배열에 저장
                 highAge=ages[i];
             }
         }
-        cout << "가장 나이가 많은 사람은 " << highName << "입니다.\n\n";
+        for(int i=0; i<maxPeople; i++){//가장 많은 나이를 비교해서 가장 많은 나이를 가진 사람 출력
+            if(highAge==ages[i])
+            cout << highName[i] << " ";
+        }
+        cout << "입니다.\n\n";
             break;
         case 2: //나이가 가장 적은 사람
+        cout << "가장 나이가 적은 사람은 ";
             for(int i=0; i<maxPeople; i++){
-            if(lowAge>ages[i]){
-                lowName=names[i];
+            if(lowAge>=ages[i]){
+                lowName[i]=names[i];//사람을 배열에 저장
                 lowAge=ages[i];
             }
         }
-        cout << "가장 나이가 적은 사람은" << lowName << "입니다.\n\n";
+        for(int i=0; i<maxPeople; i++){//가장 적은 나이를 비교해서 가장 적은 나이를 가진 사람 출력
+            if(lowAge==ages[i])
+            cout << lowName[i] << " ";
+        }
+        cout << "입니다.\n\n";
             break;
         case 3:
             cout << "종료합니다." << endl;
