@@ -6,7 +6,7 @@ int main(){
     const int maxPeople =5;
     string names[maxPeople];
     int ages[maxPeople];
-    string highName[5];
+    string highName[5]={"name"};
     string lowName[5];
     int highAge=0;
     int lowAge =1000;
@@ -38,7 +38,7 @@ int main(){
                 highAge=ages[i];
             }
         }
-        for(int i=0; i<maxPeople; i++){//가장 많은 나이를 비교해서 가장 많은 나이를 가진 사람 출력
+        for(int i=0; i<maxPeople; i++){//가장 많은 나이를 비교해서 가장 많은 나이를 가진 사람(들) 출력
             if(highAge==ages[i])
             cout << highName[i] << " ";
         }
@@ -52,7 +52,7 @@ int main(){
                 lowAge=ages[i];
             }
         }
-        for(int i=0; i<maxPeople; i++){//가장 적은 나이를 비교해서 가장 적은 나이를 가진 사람 출력
+        for(int i=0; i<maxPeople; i++){//가장 적은 나이를 비교해서 가장 적은 나이를 가진 사람(들) 출력
             if(lowAge==ages[i])
             cout << lowName[i] << " ";
         }
