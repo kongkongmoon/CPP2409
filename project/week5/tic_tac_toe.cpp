@@ -62,21 +62,37 @@ int main(){
         cout << "---|---|---" << endl;
         k++;
 
-        // 빙고 시 승자 출력 후 종료 (가로 세로 대각선 비교 but 빈칸일 때도 작동하는 오류)
+        // 빙고 시 승자 출력 후 종료
         /*00 10 20
           01 11 21
           02 12 22*/
         if(k>=5){
-        if(((board[0][0]==board[0][1]) && (board[0][1]==board[0][2])) || ((board[1][0]==board[1][1]) && (board[1][1]==board[1][2])) || ((board[2][0]==board[2][1]) && (board[2][1]==board[20][2]))){
-            cout << "가로로 한줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
+            if(((currentUser==board[0][0]) && (board[0][0]==board[0][1])) && (board[0][1]==board[0][2])){
+            cout << "가로로 첫째줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
             break;
-        }else if(((board[0][0]==board[1][0]) && (board[1][0]==board[2][0])) || ((board[0][1]==board[1][1]) && (board[1][1]==board[2][1])) ||((board[0][2]==board[1][2]) && (board[1][2]==board[2][2]))){
-            cout << "세로로 한줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
+            }else if(((currentUser==board[1][0]) && (board[1][0]==board[1][1])) && (board[1][1]==board[1][2])){
+            cout << "가로로 둘째줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
             break;
-        }else if(((board[0][0]==board[1][1]) && (board[1][1]==board[2][2])) || ((board[2][0]==board[1][1]) && (board[1][1]==board[0][2]))) {
-            cout <<" 대각선으로 한줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
+            }else if(((currentUser==board[2][0]) && (board[2][0]==board[2][1])) && (board[2][1]==board[2][2])){
+            cout << "가로로 셋째줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
             break;
-        }}
+            }else if(((currentUser==board[0][0]) && (board[0][0]==board[1][0])) && (board[1][0]==board[2][0])){
+            cout << "세로로 첫째줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
+            break;
+            }else if(((currentUser==board[0][1]) && (board[0][1]==board[1][1])) && (board[1][1]==board[2][1])){
+            cout << "세로로 둘째줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
+            break;
+            }else if(((currentUser==board[0][2]) && (board[0][2]==board[1][2])) && (board[1][2]==board[2][2])){
+            cout << "세로로 셋째줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
+            break;
+            }else if(((currentUser==board[0][0]) && (board[0][0]==board[1][1])) && (board[1][1]==board[2][2])){
+            cout << "대각선으로 한줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
+            break;
+            }else if(((currentUser==board[2][0]) && (board[2][0]==board[1][1])) && (board[1][1]==board[0][2])){
+            cout <<  "대각선로 한줄이 완성되었습니다. 유저("<< currentUser << ")의 승리입니다. 게임을 종료합니다." << endl;
+            break;
+            }
+        }
         
         // 모든 칸이 찼으면 종료
         if(k==9){
