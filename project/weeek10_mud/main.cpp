@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include "user.h"  // User 클래스 헤더 파일 포함
 
 using namespace std;
@@ -13,9 +14,9 @@ bool checkXY(int user_x, int mapX, int user_y, int mapY) {
 }
 
 // 지도와 사용자 위치 출력하는 함수
-void displayMap(int map[mapY][mapX], int user_x, int user_y) {
-    for (int i = 0; i < mapY; i++) {
-        for (int j = 0; j < mapX; j++) {
+void displayMap(const vector<vector<int>>& map, int user_x, int user_y) {
+    for (int i = 0; i < map.size(); i++) {
+        for (int j = 0; j < map[i].size(); j++) {
             if (i == user_y && j == user_x) {
                 cout << " USER |";
             } else {
@@ -33,20 +34,20 @@ void displayMap(int map[mapY][mapX], int user_x, int user_y) {
 }
 
 // 유저의 위치가 목적지인지 체크하는 함수
-bool checkGoal(int map[mapY][mapX], int user_x, int user_y) {
+bool checkGoal(const vector<vector<int>>& map, int user_x, int user_y) {
     return map[user_y][user_x] == 4;
 }
 
 // 아이템, 적, 포션을 만났을 때의 동작을 처리하는 함수
-void checkState(int map[mapY][mapX], int& user_x, int& user_y, User& user) {
+void checkState(vector<vector<int>>& map, int& user_x, int& user_y, User& user) {
     switch (map[user_y][user_x]) {
         case 1:
             {cout << "아이템이 있습니다. 포션의 위치로 이동하겠습니까? (1: 네 / 그 외: 아니오)" << endl;
             string answer;
             cin >> answer;
             if (answer == "1") {
-                for (int i = 0; i < mapY; i++) {
-                    for (int j = 0; j < mapX; j++) {
+                for (int i = 0; i < map.size(); i++) {
+                    for (int j = 0; j < map[i].size(); j++) {
                         if (map[i][j] == 3) {
                             user_x = j;
                             user_y = i;
@@ -59,8 +60,7 @@ void checkState(int map[mapY][mapX], int& user_x, int& user_y, User& user) {
                 }
             } else {
                 cout << "'아니오'를 선택했습니다." << endl;
-            }
-            break;}
+            }}
         case 2:
             cout << "적이 있습니다. HP가 2 줄어듭니다." << endl;
             user.DecreaseHP(2);
@@ -75,7 +75,7 @@ void checkState(int map[mapY][mapX], int& user_x, int& user_y, User& user) {
 }
 
 // HP가 0 이하인지 체크하는 함수
-bool CheckUser(User user) {
+bool CheckUser(const User& user) {
     return user.GetHP() > 0;
 }
 
@@ -83,7 +83,8 @@ bool CheckUser(User user) {
 int main() {
     User user; // 유저 객체 생성
 
-    int map[mapY][mapX] = {
+    // 2차원 벡터로 맵 초기화
+    vector<vector<int>> map = {
         {0, 1, 2, 0, 4},
         {1, 0, 0, 2, 0},
         {0, 0, 0, 0, 0},
