@@ -31,6 +31,10 @@ void displayMap(const vector<vector<int>>& map, int user_x, int user_y) {
     }
 }
 
+bool checkGoal(const vector<vector<int>>& map, int user_x, int user_y) {
+    return map[user_y][user_x] == 4;
+}
+
 void checkState(vector<vector<int>>& map, int& user_x, int& user_y, User& user) {
     switch (map[user_y][user_x]) {
         case 1: // 아이템
@@ -52,14 +56,33 @@ void checkState(vector<vector<int>>& map, int& user_x, int& user_y, User& user) 
     }
 }
 
-int main() {
-    // Magician과 Warrior 생성
-    Magician magician("마법사");
-    Warrior warrior("전사");
+bool CheckUser(const User& user) {
+    return user.GetHP() > 0;
+}
 
-    // 플레이어 상태
-    vector<User*> players = {&magician, &warrior};
-    int currentPlayer = 0; // 0: Magician, 1: Warrior
+void moveUser(const string& user_input, int& user_x, int& user_y, User& user, const vector<vector<int>>& map) {
+    int prev_x = user_x;
+    int prev_y = user_y;
+
+    if (user_input == "up") user_y--;
+    else if (user_input == "down") user_y++;
+    else if (user_input == "left") user_x--;
+    else if (user_input == "right") user_x++;
+    else return;
+
+    if (!checkXY(user_x, mapX, user_y, mapY)) {
+        cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
+        user_x = prev_x;
+        user_y = prev_y;
+    } else {
+        user.DecreaseHP(1);  // 이동 시 HP 감소
+    }
+}
+
+int main() {
+    Magician magician;
+    Warrior warrior;
+
     vector<vector<int>> map = {
         {0, 1, 2, 0, 4},
         {1, 0, 0, 2, 0},
@@ -68,82 +91,49 @@ int main() {
         {3, 0, 0, 0, 2}
     };
 
-    // 각 플레이어 위치
-    vector<pair<int, int>> positions = {{0, 0}, {0, 0}}; // {x, y} 좌표
+    int magician_x = 0, magician_y = 0;
+    int warrior_x = 4, warrior_y = 4;
+    bool magician_turn = true;
 
     while (true) {
-        User* user = players[currentPlayer];
-        int& user_x = positions[currentPlayer].first;
-        int& user_y = positions[currentPlayer].second;
+        User& current_user = magician_turn ? static_cast<User&>(magician) : static_cast<User&>(warrior);
+        int& user_x = magician_turn ? magician_x : warrior_x;
+        int& user_y = magician_turn ? magician_y : warrior_y;
 
-        cout << "\n현재 플레이어: " << (currentPlayer == 0 ? "마법사" : "전사") << endl;
-        cout << *user << endl;
+        cout << (magician_turn ? "Magician" : "Warrior") << "의 차례입니다!" << endl;
+        cout << "현재 HP: " << current_user.GetHP() << endl;
+        displayMap(map, user_x, user_y);
 
-        cout << "명령어를 입력하세요 (up, down, left, right, map, attack, finish): ";
+        cout << "명령어를 입력하세요 (up, down, left, right, map, finish): ";
         string user_input;
         cin >> user_input;
 
-        if (user_input == "up") {
-            user_y -= 1;
-            if (!checkXY(user_x, mapX, user_y, mapY)) {
-                cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-                user_y += 1;
-            } else {
-                user.DecreaseHP(1);
-                displayMap(map, user_x, user_y);
-                checkState(map, user_x, user_y, *user);
-            }
-        } else if (user_input == "down") {
-            user_y += 1;
-            if (!checkXY(user_x, mapX, user_y, mapY)) {
-                cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-                user_y -= 1;
-            } else {
-                user.DecreaseHP(1);
-                displayMap(map, user_x, user_y);
-                checkState(map, user_x, user_y, *user);
-            }
-        } else if (user_input == "left") {
-            user_x -= 1;
-            if (!checkXY(user_x, mapX, user_y, mapY)) {
-                cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-                user_x += 1;
-            } else {
-                user.DecreaseHP(1);
-                displayMap(map, user_x, user_y);
-                checkState(map, user_x, user_y, *user);
-            }
-        } else if (user_input == "right") {
-            user_x += 1;
-            if (!checkXY(user_x, mapX, user_y, mapY)) {
-                cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-                user_x -= 1;
-            } else {
-                user.DecreaseHP(1);
-                displayMap(map, user_x, user_y);
-                checkState(map, user_x, user_y, *user);
-            }
-        } else if (user_input == "map") {
-            displayMap(map, user_x, user_y);
-        } else if (user_input == "attack") {
-            user->DoAttack();
-        } else if (user_input == "finish") {
+        if (user_input == "finish") {
             cout << "게임을 종료합니다." << endl;
             break;
+        } else if (user_input == "map") {
+            displayMap(map, user_x, user_y);
         } else {
-            cout << "잘못된 입력입니다." << endl;
-            continue;
+            moveUser(user_input, user_x, user_y, current_user, map);
+            checkState(map, user_x, user_y, current_user);
         }
 
-        // HP 체크
-        if (user->GetHP() <= 0) {
-            cout << "\n" << (currentPlayer == 0 ? "마법사" : "전사") << "가 죽었습니다. 게임 종료." << endl;
+        if (checkGoal(map, user_x, user_y)) {
+            cout << (magician_turn ? "Magician" : "Warrior") << "이(가) 목적지에 도착했습니다! 축하합니다!" << endl;
             break;
         }
 
-        // 턴 교체
-        currentPlayer = 1 - currentPlayer;
+        if (!CheckUser(magician)) {
+            cout << "Magician의 HP가 0입니다. Warrior가 승리했습니다!" << endl;
+            break;
+        } else if (!CheckUser(warrior)) {
+            cout << "Warrior의 HP가 0입니다. Magician이 승리했습니다!" << endl;
+            break;
+        }
+
+        magician_turn = !magician_turn;  // 턴 교대
     }
 
+    cout << "게임 종료!" << endl;
     return 0;
 }

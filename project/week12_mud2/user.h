@@ -3,57 +3,38 @@
 
 #include <iostream>
 #include <string>
-using namespace std;
 
-// Base User Class
 class User {
 protected:
-    int hp;          // 캐릭터의 HP
-    string name;     // 캐릭터 이름
-    int itemCount;   // 획득한 아이템 수
+    int hp;       // 사용자 HP
+    int itemCnt;  // 먹은 아이템 수
 
 public:
-    User(string name, int hp = 10) : name(name), hp(hp), itemCount(0) {}
-    virtual ~User() {}
+    User(int initial_hp = 20);    // 생성자
+    virtual ~User() = default;    // 가상 소멸자
 
-    // HP 및 아이템 관리
-    int GetHP() const { return hp; }
-    void DecreaseHP(int amount) { hp = max(0, hp - amount); }
-    void IncreaseHP(int amount) { hp += amount; }
-    void IncreaseItemCount() { itemCount++; }
-    int GetItemCount() const { return itemCount; }
+    void DecreaseHP(int dec_hp);  // HP 감소
+    void IncreaseHP(int inc_hp);  // HP 증가
+    void IncreaseItemCount();     // 아이템 횟수 증가
+    int GetHP() const;            // 현재 HP 반환
+    int GetItemCount() const;     // 아이템 횟수 반환
 
-    // 공격 동작
-    virtual void DoAttack() const {
-        cout << name << ": 공격합니다!" << endl;
-    }
+    virtual void doAttack() const; // 공격 동작 (가상 함수)
 
-    // 출력 연산자 오버로드
-    friend ostream& operator<<(ostream& os, const User& user) {
-        os << "이름: " << user.name << ", HP: " << user.hp
-           << ", 아이템 수: " << user.itemCount;
-        return os;
-    }
+    // 출력 연산자 오버로딩
+    friend std::ostream& operator<<(std::ostream& os, const User& user);
 };
 
-// Magician Class (Derived from User)
 class Magician : public User {
 public:
-    Magician(string name) : User(name) {}
-
-    void DoAttack() const override {
-        cout << name << ": 마법 사용!" << endl;
-    }
+    Magician();
+    void doAttack() const override; // 마법 공격
 };
 
-// Warrior Class (Derived from User)
 class Warrior : public User {
 public:
-    Warrior(string name) : User(name) {}
-
-    void DoAttack() const override {
-        cout << name << ": 베기 사용!" << endl;
-    }
+    Warrior();
+    void doAttack() const override; // 베기 공격
 };
 
 #endif
